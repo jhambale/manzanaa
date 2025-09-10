@@ -5,7 +5,10 @@
 Created on July 17 2025
 @author: jhambale
 example run: python 03_manzanaa_plots.py \
--i ../../manzanaa_data/manzanaa_outputs/maa_001/mutation_dfs/*mutation_analysis.csv -m ../../manzanaa_data/ngs_raw/maa_001/demultiplex/maa_001_demux_metadata.txt -r ../../manzanaa_data/ngs_raw/maa_001/references/ -s 40 -t 10
+-i ../../manzanaa_data/manzanaa_outputs/maa_001/mutation_dfs/*mutation_analysis.csv \
+-m ../../manzanaa_data/ngs_raw/maa_001/demultiplex/maa_001_demux_metadata.txt \
+-r ../../manzanaa_data/ngs_raw/maa_001/references/ \
+-c 25 -s 40 -t 10
 """
 # activate virtual enviroment before running script
 # source activate minibinders
@@ -29,6 +32,7 @@ def main():
     parser.add_argument('-i', nargs='+', help='List of fastq files to parse')
     parser.add_argument('-m', help='Path to metadata')
     parser.add_argument('-r', help='Path to reference database')
+    parser.add_argument('-c', help='Select CPM of interest from script 02')
     parser.add_argument('-s', help='Desired max scale of mutations')
     parser.add_argument('-t', help='Desired number of ticks per graph')
 
@@ -40,7 +44,7 @@ def main():
 
     # Set global font size and family
     plt.rcParams.update({
-        'font.size': 14,
+        'font.size': 16,
         'font.family': 'Arial'
     })
     # Set the Seaborn style
@@ -49,7 +53,8 @@ def main():
 
     mutation_df_paths = args.i #glob.glob('../../manzanaa_data/manzanaa_outputs/maa_001/alignments/*.bam') # input
     metadata_path = args.m #'../../manzanaa_data/ngs_raw/maa_001/demultiplex/maa_001_demux_metadata.txt' # input
-    ref_dir = args.r#'../../manzanaa_data/ngs_raw/maa_001/references/' # input
+    ref_dir = args.r #'../../manzanaa_data/ngs_raw/maa_001/references/' # input
+    cpm = int(args.c)
     xupperlim = float(args.s) #static number of desired DNA mutation (e.g 20)
     tick_num = float(args.t) #desired number of ticks per graph
 
@@ -71,7 +76,7 @@ def main():
 
 
 
-        sample_name = mutation_path.split('/')[-1].replace('_cpm30_mutation_analysis.csv','')
+        sample_name = mutation_path.split('/')[-1].replace(f'_cpm{cpm}_mutation_analysis.csv','')
         outdir = '/'.join(mutation_path.replace('mutation_dfs', 'mutation_figs').split('/')[:-1]) + '/'
         make_dir(outdir)
         outdir_sample = outdir + sample_name +'/'
@@ -119,12 +124,11 @@ def main():
         ax = plt.gca()
         g.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-        # tick_scale = xupperlim*0.1 #ten ticks desired
 
         ticks = ax.get_xticks()
         print(ticks)
         print(ticks[-1])
-        #set xmax, linspace from 0, add offset as percentage of range
+        # set xmax, linspace from 0, add offset as percentage of range
         if ticks[-1] > xupperlim:
             scaled_ticks = np.linspace(-(tick_scale),xupperlim, num=int(((xupperlim/tick_scale)+2)),endpoint=True)
             print(scaled_ticks)
@@ -149,9 +153,9 @@ def main():
         g.set_xlim([new_ticks[0]+0.5, new_ticks[-1]-0.5])
 
 
-        # Show the plot
+        # Show/save the plot
         plt.savefig(f'{outname}_dna_dist_wt.png', dpi=400)
-        plt.savefig(f'{outname}_dna_dist_wt.pdf', dpi=400)
+        # plt.savefig(f'{outname}_dna_dist_wt.pdf', dpi=400)
         # plt.show()
         plt.close()
 
@@ -162,7 +166,6 @@ def main():
         # Adjust the ticks
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-        # tick_scale = aa_xupperlim*0.1 #ten ticks desired
 
         ticks = ax.get_xticks()
         print(ticks)
@@ -189,9 +192,9 @@ def main():
 
         # Show the plot
         plt.savefig(f'{outname}_aa_dist_wt.png', dpi=400)
-        plt.savefig(f'{outname}_aa_dist_wt.pdf', dpi=400)
-        plt.close(
-        )
+        # plt.savefig(f'{outname}_aa_dist_wt.pdf', dpi=400)
+        plt.close()
+        
         # Create a seaborn histogram
         g = sns.histplot(data=hamming_pairwise_dna,
                          binwidth=1,stat='probability',
@@ -200,12 +203,11 @@ def main():
         # Adjust the ticks
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-        # tick_scale = xupperlim*0.1 #ten ticks desired
 
         ticks = ax.get_xticks()
         print(ticks)
         print(ticks[-1])
-        #set xmax, linspace from 0, add offset as percentage of range
+        # set xmax, linspace from 0, add offset as percentage of range
         if ticks[-1] > xupperlim:
             scaled_ticks = np.linspace(-(tick_scale),xupperlim, num=int(((xupperlim/tick_scale)+2)),endpoint=True)
             print(scaled_ticks)
@@ -213,8 +215,7 @@ def main():
         else:
             new_ticks = ticks[:-1] + 0.5
 
-        # ticks = g.get_xticks()
-        # new_ticks = ticks[:-1] + 0.5
+
         g.set_xticks(new_ticks)
         g.set_xticklabels([str(int(t)) for t in new_ticks])
 
@@ -229,7 +230,7 @@ def main():
 
         # Show the plot
         plt.savefig(f'{outname}_dna_dist_pairwise.png', dpi=400)
-        plt.savefig(f'{outname}_dna_dist_pairwise.pdf', dpi=400)
+        # plt.savefig(f'{outname}_dna_dist_pairwise.pdf', dpi=400)
 
         plt.close()
 
@@ -241,9 +242,6 @@ def main():
         # Adjust the ticks
         ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
-
-        # aa_xupperlim = xupperlim/3 #divide scale by 3 to reflect 3 codons per amino acid
-        # tick_scale = aa_xupperlim*0.1 #ten ticks desired
 
         ticks = ax.get_xticks()
         print(ticks)
@@ -257,8 +255,6 @@ def main():
             new_ticks = ticks[:-1] + 0.5
         
         
-        # ticks = g.get_xticks()
-        # new_ticks = ticks[:-1] + 0.5
         g.set_xticks(new_ticks)
         g.set_xticklabels([str(int(t)) for t in new_ticks])
 
@@ -274,7 +270,7 @@ def main():
 
         # Show the plot
         plt.savefig(f'{outname}_aa_dist_pairwise.png', dpi=400)
-        plt.savefig(f'{outname}_aa_dist_pairwise.pdf', dpi=400)
+        # plt.savefig(f'{outname}_aa_dist_pairwise.pdf', dpi=400)
         plt.close()
 
         # Create a seaborn histogram
@@ -319,7 +315,7 @@ def main():
 
         # Show the plot
         plt.savefig(f'{outname}_ham_pw.png', dpi=400)
-        plt.savefig(f'{outname}_ham_pw.pdf', dpi=400)
+        # plt.savefig(f'{outname}_ham_pw.pdf', dpi=400)
         plt.close()
         print(np.mean(hamming_pairwise_aa))
         print(np.mean(aa_hamming))

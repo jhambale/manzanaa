@@ -23,7 +23,7 @@
 # filename is assumed (R2 if R1, or R1 if R2.)
 # Example 1: bash 01_filter_ngmerge_reads.sh
 # ../../manzanaa_data/ngs_raw/fl_001/demultiplex/fl_001_demux_metadata.txt fl_001
-# ../../manzanaa_data/ngs_raw/jh_001/demultiplex/*_R1_001.fastq.gz
+# ../../manzanaa_data/ngs_raw/fl_001/demultiplex/*_R1_001.fastq.gz
 #
 ### OUTPUTS
 ## FastQC
@@ -89,10 +89,10 @@ do
 	dname=$(dirname $fastq)
 	fpath=$dname/${fname%_R[12]_001.fastq*}
 	experiment_name=$(cat $METADATA | grep $fname | cut -f2)
-	reference_name=$(cat $METADATA | grep $fname | cut -f12)
-    reference_size=$(cat $METADATA | grep $fname | cut -f13)
-	flank_f=$(cat $METADATA | grep $fname | cut -f10)
-	flank_r=$(cat $METADATA | grep $fname | cut -f11)
+	reference_name=$(cat $METADATA | grep $fname | cut -f9)
+    reference_size=$(cat $METADATA | grep $fname | cut -f10)
+	flank_f=$(cat $METADATA | grep $fname | cut -f7)
+	flank_r=$(cat $METADATA | grep $fname | cut -f8)
 
   echo Experiment name $experiment_name
     fastqc_out_path=../../manzanaa_data/manzanaa_outputs/$experiment_name/fastqc_output/
@@ -101,7 +101,7 @@ do
 	seqkit_stats_out_path=../../manzanaa_data/manzanaa_outputs/$experiment_name/seqkit_stats/${fname%_R[12]_001.fastq*}
 	seqkit_filtered_read_variants_out_path=../../manzanaa_data/manzanaa_outputs/$experiment_name/merged_variants_filtered_reads/${fname%_R[12]_001.fastq*}
 	alignment_out_path=../../manzanaa_data/manzanaa_outputs/$experiment_name/alignments/${fname%_R[12]_001.fastq*}
-  unmapped_out_path=../../minibinders_data/minibinders_outputs/$experiment_name/alignments/unmapped/${fname%_R[12]_001.fastq*}
+  unmapped_out_path=../../manzanaa_data/manzanaa_outputs/$experiment_name/alignments/unmapped/${fname%_R[12]_001.fastq*}
 	reference_path=../../manzanaa_data/ngs_raw/$experiment_name/references/${reference_name%.fasta}
 
 
@@ -140,7 +140,7 @@ do
 			  then
 					echo Making directory $output_dir_prefix/alignments/
 			    mkdir $output_dir_prefix/alignments/
-          mkdir $output_dir_prefix/alignments/unmapped/
+                mkdir $output_dir_prefix/alignments/unmapped/
 				fi
 
 				# output directory for merged reads
@@ -198,7 +198,6 @@ do
           2> ${merge_out_path}_out_ngmerge_stats.txt
 
       gunzip "${merge_out_path}_out_ngmerged.assembled.fastq"
-  fi
 
 	### FILTER FASTQ FILES USING SEQKIT
 	echo Beginning filtering for $fname
@@ -225,7 +224,7 @@ do
 
     samtools view -b -f 4 ${unmapped_out_path}.sorted.bam > ${unmapped_out_path}_unmapped.bam
     samtools fastq ${unmapped_out_path}_unmapped.bam > ${unmapped_out_path}_unmapped.fastq
-    fastqc ${unmapped_out_path}_unmapped.fastq -o $unmapped_out_path
+    fastqc ${unmapped_out_path}_unmapped.fastq -o ../../manzanaa_data/manzanaa_outputs/$experiment_name/alignments/unmapped/
 
 
 			echo _____________new sample____________________________

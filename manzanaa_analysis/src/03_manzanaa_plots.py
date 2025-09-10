@@ -76,7 +76,7 @@ def main():
 
 
 
-        sample_name = mutation_path.split('/')[-1].replace(f'_cpm{cpm}_mutation_analysis.csv','')
+        sample_name = mutation_path.split('/')[-1].replace(f'cpm{cpm}_mutation_analysis.csv','')
         outdir = '/'.join(mutation_path.replace('mutation_dfs', 'mutation_figs').split('/')[:-1]) + '/'
         make_dir(outdir)
         outdir_sample = outdir + sample_name +'/'
@@ -84,7 +84,6 @@ def main():
 
         outname = outdir_sample + sample_name
 
-        sample_name = mutation_path.split('/')[-1].replace('_cpm30_mutation_analysis.csv','')
         metadata_samp = metadata_df.copy()[metadata_df['sample_id'].str.contains(sample_name)]
         reference_name = list(metadata_samp['reference'])[0]
 

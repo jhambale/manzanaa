@@ -51,14 +51,15 @@ def main():
     sns.set_style("ticks")
 
 
-    mutation_df_paths = args.i #glob.glob('../../manzanaa_data/manzanaa_outputs/maa_001/alignments/*.bam') # input
+    mutation_df_all = args.i #glob.glob('../../manzanaa_data/manzanaa_outputs/maa_001/alignments/*.bam') # input
     metadata_path = args.m #'../../manzanaa_data/ngs_raw/maa_001/demultiplex/maa_001_demux_metadata.txt' # input
     ref_dir = args.r #'../../manzanaa_data/ngs_raw/maa_001/references/' # input
     cpm = int(args.c)
     xupperlim = float(args.s) #static number of desired DNA mutation (e.g 20)
     tick_num = float(args.t) #desired number of ticks per graph
 
-
+    mutation_df_paths = [path for path in mutation_df_all if f'cpm{cpm}' in path]
+    
     # mutation_df_paths = glob.glob('../../manzanaa_data/manzanaa_outputs/maa_001/mutation_dfs/*mutation_analysis.csv')
     # metadata_path = '../../manzanaa_data/ngs_raw/maa_001/demultiplex/maa_001_demux_metadata.txt' # input
     metadata_df = metadata_df = pd.read_csv(metadata_path,

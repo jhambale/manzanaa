@@ -4,7 +4,10 @@
 """
 Created on July 02 2025
 @author: jhambale
-example run 1: python 02_manzanaa.py  -i ../../manzanaa_data/manzanaa_outputs/fl_001/alignments/*.bam -m ../../manzanaa_data/ngs_raw/fl_001/demultiplex/fl_001_demux_metadata.txt -r ../../manzanaa_data/ngs_raw/fl_001/references/ -n 5
+example run 1: python 02_manzanaa.py  -i ../../manzanaa_data/manzanaa_outputs/fl_001/alignments/*.bam \
+-m ../../manzanaa_data/ngs_raw/fl_001/demultiplex/fl_001_demux_metadata.txt \
+-r ../../manzanaa_data/ngs_raw/fl_001/references/ \
+-n 5
 example run 2: python 02_mutation_analysis.py  -i ../../manzanaa_data/manzanaa_outputs/fl_002/alignments/*.bam -m ../../manzanaa_data/ngs_raw/fl_002/demultiplex/fl_002_demux_metadata.txt -r ../../manzanaa_data/ngs_raw/fl_002/references/ -n 50
 
 """

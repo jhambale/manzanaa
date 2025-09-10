@@ -5,9 +5,9 @@
 Created on July 17 2025
 @author: jhambale
 example run: python 03_manzanaa_plots.py \
--i ../../manzanaa_data/manzanaa_outputs/maa_001/mutation_dfs/*mutation_analysis.csv \
--m ../../manzanaa_data/ngs_raw/maa_001/demultiplex/maa_001_demux_metadata.txt \
--r ../../manzanaa_data/ngs_raw/maa_001/references/ \
+-i ../../manzanaa_data/manzanaa_outputs/fl_001/mutation_dfs/*mutation_analysis.csv \
+-m ../../manzanaa_data/ngs_raw/fl_001/demultiplex/fl_001_demux_metadata.txt \
+-r ../../manzanaa_data/ngs_raw/fl_001/references/ \
 -c 25 -s 40 -t 10
 """
 # activate virtual enviroment before running script
@@ -154,7 +154,7 @@ def main():
 
 
         # Show/save the plot
-        plt.savefig(f'{outname}_dna_dist_wt.png', dpi=400)
+        plt.savefig(f'{outname}cpm{cpm}_dna_dist_wt.png', dpi=400)
         # plt.savefig(f'{outname}_dna_dist_wt.pdf', dpi=400)
         # plt.show()
         plt.close()
@@ -191,7 +191,7 @@ def main():
         g.set_xlim([new_ticks[0]+0.5, new_ticks[-1]-0.5])
 
         # Show the plot
-        plt.savefig(f'{outname}_aa_dist_wt.png', dpi=400)
+        plt.savefig(f'{outname}cpm{cpm}_aa_dist_wt.png', dpi=400)
         # plt.savefig(f'{outname}_aa_dist_wt.pdf', dpi=400)
         plt.close()
         
@@ -229,7 +229,7 @@ def main():
         g.set_xlim([new_ticks[0]+0.5, new_ticks[-1]-0.5])
 
         # Show the plot
-        plt.savefig(f'{outname}_dna_dist_pairwise.png', dpi=400)
+        plt.savefig(f'{outname}cpm{cpm}_dna_dist_pairwise.png', dpi=400)
         # plt.savefig(f'{outname}_dna_dist_pairwise.pdf', dpi=400)
 
         plt.close()
@@ -269,7 +269,7 @@ def main():
 
 
         # Show the plot
-        plt.savefig(f'{outname}_aa_dist_pairwise.png', dpi=400)
+        plt.savefig(f'{outname}cpm{cpm}_aa_dist_pairwise.png', dpi=400)
         # plt.savefig(f'{outname}_aa_dist_pairwise.pdf', dpi=400)
         plt.close()
 
@@ -314,7 +314,7 @@ def main():
 
 
         # Show the plot
-        plt.savefig(f'{outname}_ham_pw.png', dpi=400)
+        plt.savefig(f'{outname}cpm{cpm}_ham_pw.png', dpi=400)
         # plt.savefig(f'{outname}_ham_pw.pdf', dpi=400)
         plt.close()
         print(np.mean(hamming_pairwise_aa))
